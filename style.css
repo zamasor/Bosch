@@ -1,11 +1,12 @@
-/* CSS CYBERPUNK PORTFOLIO - RENATO VALENTIN CACHUBA (ZAMASOR) */
+/* CSS CYBERPUNK SAMURAI / JOHNNY SILVERHAND STYLE - RENATO VALENTIN CACHUBA (ZAMASOR) */
 :root {
-    --bg-color: #08090c;
-    --card-bg: rgba(14, 18, 25, 0.85);
-    --neon-cyan: #00f3ff;
-    --neon-pink: #ff0055;
+    --bg-color: #050507;
+    --card-bg: rgba(12, 12, 16, 0.9);
+    --silver-red: #ff003c;
     --neon-yellow: #fcee0a;
-    --text-color: #d1f7ff;
+    --neon-cyan: #00f3ff;
+    --chrome-silver: #d0d5dd;
+    --text-color: #e2e8f0;
     --font-head: 'Orbitron', sans-serif;
     --font-mono: 'Share Tech Mono', monospace;
     --font-body: 'Rajdhani', sans-serif;
@@ -22,7 +23,7 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-body);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     overflow-x: hidden;
     line-height: 1.6;
 }
@@ -42,30 +43,46 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 3px, 6px 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 60, 0.03), rgba(0, 243, 255, 0.01), rgba(252, 238, 10, 0.03));
+    background-size: 100% 4px, 6px 100%;
     z-index: -1;
     pointer-events: none;
+}
+
+/* Rock Glitch Overlay System */
+.rock-glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.12;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: opacity 0.1s ease;
 }
 
 .cursor-dot {
     position: fixed;
     width: 8px;
     height: 8px;
-    background: var(--neon-cyan);
+    background: var(--silver-red);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--neon-cyan);
+    box-shadow: 0 0 12px var(--silver-red);
     transition: transform 0.05s linear;
 }
 
 .cursor-ring {
     position: fixed;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--neon-pink);
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--neon-yellow);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
@@ -89,71 +106,88 @@ body {
 
 .boot-box {
     width: 90%;
-    max-width: 600px;
-    border: 1px solid var(--neon-cyan);
-    padding: 30px;
-    background: rgba(0, 243, 255, 0.03);
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    max-width: 650px;
+    border: 2px solid var(--silver-red);
+    padding: 35px;
+    background: rgba(255, 0, 60, 0.04);
+    box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
     font-family: var(--font-mono);
 }
 
 .progress-bar-container {
     width: 100%;
-    height: 12px;
+    height: 14px;
     background: #111;
     margin: 20px 0;
-    border: 1px solid var(--neon-cyan);
+    border: 1px solid var(--silver-red);
     padding: 2px;
 }
 
 .progress-bar {
     width: 0%;
     height: 100%;
-    background: var(--neon-cyan);
-    box-shadow: 0 0 8px var(--neon-cyan);
+    background: var(--silver-red);
+    box-shadow: 0 0 12px var(--silver-red);
     transition: width 0.1s linear;
 }
 
 .boot-log {
     color: var(--neon-yellow);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     min-height: 24px;
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
+    position: relative;
+    z-index: 2;
 }
 
 header {
     text-align: center;
-    padding: 60px 0 40px;
-    border-bottom: 2px solid var(--neon-cyan);
-    margin-bottom: 50px;
+    padding: 80px 0 50px;
+    border-bottom: 3px solid var(--silver-red);
+    margin-bottom: 60px;
     position: relative;
+    background: linear-gradient(180deg, rgba(255, 0, 60, 0.05) 0%, rgba(0,0,0,0) 100%);
 }
 
 header::after {
     content: '';
     position: absolute;
-    bottom: -6px;
-    right: 20%;
-    width: 60px;
-    height: 10px;
-    background: var(--neon-pink);
+    bottom: -8px;
+    right: 15%;
+    width: 100px;
+    height: 13px;
+    background: var(--neon-yellow);
 }
 
 .glitch-title {
     font-family: var(--font-head);
-    font-size: 3rem;
     font-weight: 900;
     color: #fff;
     position: relative;
     display: inline-block;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 0 0 10px var(--neon-cyan);
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px var(--silver-red);
+}
+
+.hero-name {
+    font-size: 4rem;
+    line-height: 1.1;
+    display: block;
+}
+
+.hero-alias {
+    font-size: 5rem;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 20px var(--neon-yellow);
+    display: block;
+    margin-top: 10px;
+    letter-spacing: 8px;
 }
 
 .glitch-title::before, .glitch-title::after {
@@ -167,156 +201,160 @@ header::after {
 }
 
 .glitch-title:hover::before {
-    left: -2px;
-    text-shadow: 2px 0 var(--neon-pink);
-    clip: rect(24px, 550px, 90px, 0);
-    animation: glitch-anim-1 0.8s infinite linear alternate-reverse;
+    left: -3px;
+    text-shadow: 3px 0 var(--silver-red);
+    clip: rect(24px, 750px, 90px, 0);
+    animation: glitch-anim-1 0.7s infinite linear alternate-reverse;
 }
 
 .glitch-title:hover::after {
-    left: 2px;
-    text-shadow: -2px 0 var(--neon-yellow);
-    clip: rect(85px, 550px, 140px, 0);
-    animation: glitch-anim-2 0.8s infinite linear alternate-reverse;
+    left: 3px;
+    text-shadow: -3px 0 var(--neon-yellow);
+    clip: rect(85px, 750px, 140px, 0);
+    animation: glitch-anim-2 0.7s infinite linear alternate-reverse;
 }
 
 @keyframes glitch-anim-1 {
-    0% { clip: rect(10px, 9999px, 30px, 0); }
-    100% { clip: rect(60px, 9999px, 90px, 0); }
+    0% { clip: rect(10px, 9999px, 35px, 0); }
+    100% { clip: rect(70px, 9999px, 110px, 0); }
 }
 
 @keyframes glitch-anim-2 {
-    0% { clip: rect(40px, 9999px, 70px, 0); }
-    100% { clip: rect(10px, 9999px, 50px, 0); }
+    0% { clip: rect(50px, 9999px, 85px, 0); }
+    100% { clip: rect(15px, 9999px, 55px, 0); }
 }
 
 .subtitle {
     font-family: var(--font-mono);
-    color: var(--neon-pink);
-    font-size: 1.2rem;
-    margin-top: 10px;
-    letter-spacing: 2px;
+    color: var(--chrome-silver);
+    font-size: 1.4rem;
+    margin-top: 15px;
+    letter-spacing: 3px;
 }
 
 section {
-    margin-bottom: 60px;
+    margin-bottom: 70px;
 }
 
 h2 {
     font-family: var(--font-head);
-    color: var(--neon-cyan);
-    font-size: 1.8rem;
-    margin-bottom: 25px;
+    color: var(--silver-red);
+    font-size: 2.2rem;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    letter-spacing: 1px;
+    gap: 15px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+    padding-bottom: 10px;
 }
 
 .cyber-card {
     background: var(--card-bg);
-    border: 1px solid rgba(0, 243, 255, 0.2);
-    border-left: 4px solid var(--neon-cyan);
-    padding: 25px;
+    border: 1px solid rgba(255, 0, 60, 0.25);
+    border-left: 5px solid var(--silver-red);
+    padding: 30px;
     position: relative;
-    clip-path: polygon(0 0, 97% 0, 100% 12px, 100% 100%, 3% 100%, 0 95%);
+    clip-path: polygon(0 0, 96% 0, 100% 16px, 100% 100%, 4% 100%, 0 94%);
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cyber-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+    transform: translateY(-5px);
+    border-color: var(--silver-red);
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.35);
 }
 
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 25px;
 }
 
 .grid-3 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
 
 .badge {
     display: inline-block;
-    padding: 4px 10px;
-    background: rgba(252, 238, 10, 0.1);
-    border: 1px solid var(--neon-yellow);
-    color: var(--neon-yellow);
+    padding: 6px 14px;
+    background: rgba(255, 0, 60, 0.1);
+    border: 1px solid var(--silver-red);
+    color: var(--silver-red);
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .cyber-btn {
     background: transparent;
-    color: var(--neon-cyan);
-    border: 1px solid var(--neon-cyan);
+    color: var(--neon-yellow);
+    border: 1px solid var(--neon-yellow);
     font-family: var(--font-head);
-    padding: 12px 24px;
-    font-size: 0.9rem;
+    padding: 14px 28px;
+    font-size: 0.95rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     position: relative;
     transition: all 0.2s ease;
     display: inline-block;
-    margin: 5px;
+    margin: 6px;
 }
 
 .cyber-btn:hover {
-    background: var(--neon-cyan);
+    background: var(--neon-yellow);
     color: #000;
-    box-shadow: 0 0 15px var(--neon-cyan);
+    box-shadow: 0 0 20px var(--neon-yellow);
     font-weight: bold;
 }
 
 .cyber-btn:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 .terminal-window {
-    background: #05070a;
-    border: 1px solid var(--neon-cyan);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+    background: #040507;
+    border: 2px solid var(--silver-red);
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
     font-family: var(--font-mono);
-    border-radius: 4px;
+    border-radius: 2px;
     overflow: hidden;
 }
 
 .terminal-header {
-    background: rgba(0, 243, 255, 0.1);
-    padding: 8px 15px;
+    background: rgba(255, 0, 60, 0.15);
+    padding: 10px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
-    font-size: 0.85rem;
-    color: var(--neon-cyan);
+    border-bottom: 1px solid rgba(255, 0, 60, 0.4);
+    font-size: 0.9rem;
+    color: var(--silver-red);
+    font-weight: bold;
 }
 
 .terminal-body {
-    padding: 20px;
-    height: 220px;
+    padding: 25px;
+    height: 250px;
     overflow-y: auto;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .terminal-line {
-    margin-bottom: 6px;
-    line-height: 1.4;
+    margin-bottom: 8px;
+    line-height: 1.5;
 }
 
 .terminal-input-row {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-top: 1px solid #1a233a;
+    padding: 12px 25px;
+    background: rgba(0, 0, 0, 0.7);
+    border-top: 1px solid rgba(255, 0, 60, 0.3);
 }
 
 #terminal-input {
@@ -325,39 +363,41 @@ h2 {
     outline: none;
     color: #fff;
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 1.05rem;
     width: 100%;
 }
 
 .audio-toggle {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 25px;
+    right: 25px;
     background: var(--card-bg);
-    border: 1px solid var(--neon-cyan);
-    padding: 8px 15px;
+    border: 1px solid var(--silver-red);
+    padding: 10px 18px;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--neon-cyan);
+    font-size: 0.9rem;
+    color: var(--silver-red);
     z-index: 1000;
     transition: 0.3s;
 }
 
 .audio-toggle:hover {
-    box-shadow: 0 0 10px var(--neon-cyan);
+    box-shadow: 0 0 15px var(--silver-red);
 }
 
 .code-box {
     background: #000;
-    border: 1px dashed var(--neon-green, #00ff66);
-    padding: 15px;
+    border: 1px dashed var(--silver-red);
+    padding: 18px;
     font-family: var(--font-mono);
-    color: #00ff66;
-    font-size: 0.9rem;
-    min-height: 100px;
+    color: var(--silver-red);
+    font-size: 0.95rem;
+    min-height: 120px;
 }
 
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr; }
-    .glitch-title { font-size: 2rem; }
+    .hero-name { font-size: 2.5rem; }
+    .hero-alias { font-size: 3.2rem; }
+    h2 { font-size: 1.6rem; }
 }
