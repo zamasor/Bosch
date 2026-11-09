@@ -57,12 +57,30 @@ class CyberSound {
 
 const audioFX = new CyberSound();
 
-// Rock Glitch Overlay Generator (Guitars, Skulls, Rock Horns)
+// Glitch Overlay com a imagem do Samurai
 const rockSymbols = [
-    `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff003c"><path d="M18 9v8c0 2.21-1.79 4-4 4h-4c-2.21 0-4-1.79-4-4V9h2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V9h2zm-9-6v9H7V3h2zm8 0v9h-2V3h2z"/></svg>`,
-    `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fcee0a"><path d="M20.59 3.41c-.78-.78-2.05-.78-2.83 0l-2.06 2.06 1.41 1.41 2.06-2.06c.39-.39.39-1.02 0-1.41zM6.5 17.5l1.41 1.41L16 10.83l-1.41-1.41L6.5 17.5zm-2.83.91C3.11 18.97 3 19.47 3 20c0 1.1.9 2 2 2 .53 0 1.03-.11 1.59-.67l.91-.91-2.83-2.83-.91.91z"/></svg>`,
-    `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff003c"><path d="M12 2C7.58 2 4 5.58 4 10c0 2.5 1.14 4.73 2.93 6.22V19c0 .55.45 1 1 1h2v2h2v-2h2v2h2v-2h2c.55 0 1-.45 1-1v-2.78C18.86 14.73 20 12.5 20 10c0-4.42-3.58-8-8-8zm-3 9c-.83 0-1.5-.67-1.5-1.5S8.17 8 9 8s1.5.67 1.5 1.5S9.83 11 9 11zm6 0c-.83 0-1.5-.67-1.5-1.5S14.17 8 15 8s1.5.67 1.5 1.5S15.83 11 15 11z"/></svg>`
+    'Samurai.png'
 ];
+
+const rockOverlay = id('rock-glitch-overlay');
+
+function triggerRockGlitch() {
+    const randomSymbol = rockSymbols[Math.floor(Math.random() * rockSymbols.length)];
+    const randomX = Math.floor(Math.random() * 80) + 10;
+    const randomY = Math.floor(Math.random() * 80) + 10;
+    const randomScale = (Math.random() * 1.5 + 0.8).toFixed(2);
+    
+    rockOverlay.style.backgroundImage = `url('${randomSymbol}')`;
+    rockOverlay.style.backgroundPosition = `${randomX}% ${randomY}%`;
+    rockOverlay.style.transform = `scale(${randomScale})`;
+    rockOverlay.style.opacity = '0.35';
+    
+    audioFX.playGlitch();
+
+    setTimeout(() => {
+        rockOverlay.style.opacity = '0.05';
+    }, 180);
+}
 
 const rockOverlay = id('rock-glitch-overlay');
 
