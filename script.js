@@ -9,16 +9,19 @@ class CyberSound {
 
     init() {
         if (!this.ctx) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            this.ctx = new AudioCtx();
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                this.ctx = new AudioCtx();
+            } catch (e) {}
         }
     }
 
     playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.05) {
         if (!this.enabled) return;
         this.init();
+        if (!this.ctx) return;
         if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+            this.ctx.resume().catch(() => {});
         }
         try {
             const osc = this.ctx.createOscillator();
@@ -65,6 +68,7 @@ const rockSymbols = [
 const rockOverlay = id('rock-glitch-overlay');
 
 function triggerRockGlitch() {
+    if (!rockOverlay) return;
     const randomSymbol = rockSymbols[Math.floor(Math.random() * rockSymbols.length)];
     const randomX = Math.floor(Math.random() * 80) + 10;
     const randomY = Math.floor(Math.random() * 80) + 10;
@@ -93,19 +97,23 @@ const cursorDot = id('cursor-dot');
 const cursorRing = id('cursor-ring');
 
 window.addEventListener('mousemove', (e) => {
-    cursorDot.style.left = `${e.clientX}px`;
-    cursorDot.style.top = `${e.clientY}px`;
-    
-    cursorRing.style.left = `${e.clientX}px`;
-    cursorRing.style.top = `${e.clientY}px`;
+    if (cursorDot) {
+        cursorDot.style.left = `${e.clientX}px`;
+        cursorDot.style.top = `${e.clientY}px`;
+    }
+    if (cursorRing) {
+        cursorRing.style.left = `${e.clientX}px`;
+        cursorRing.style.top = `${e.clientY}px`;
+    }
 });
 
 // Canvas Background Particle Grid
 const canvas = id('bg-canvas');
-const ctx = canvas.getContext('2d');
+let ctx = canvas ? canvas.getContext('2d') : null;
 let particles = [];
 
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -115,6 +123,7 @@ resizeCanvas();
 class Particle {
     constructor() { this.reset(); }
     reset() {
+        if (!canvas) return;
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 1.2;
@@ -123,11 +132,13 @@ class Particle {
         this.alpha = Math.random() * 0.6 + 0.2;
     }
     update() {
+        if (!canvas) return;
         this.x += this.vx;
         this.y += this.vy;
         if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) { this.reset(); }
     }
     draw() {
+        if (!ctx) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 0, 60, ${this.alpha})`;
@@ -138,6 +149,7 @@ class Particle {
 for (let i = 0; i < 70; i++) { particles.push(new Particle()); }
 
 function animateCanvas() {
+    if (!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p, idx) => {
         p.update();
@@ -178,10 +190,10 @@ const bootInterval = setInterval(() => {
     bootProgress += Math.floor(Math.random() * 15) + 6;
     if (bootProgress > 100) bootProgress = 100;
     
-    progressBar.style.width = `${bootProgress}%`;
+    if (progressBar) progressBar.style.width = `${bootProgress}%`;
     
     if (bootProgress > (logIdx + 1) * 20 && logIdx < bootLogs.length) {
-        bootLog.textContent = bootLogs[logIdx];
+        if (bootLog) bootLog.textContent = bootLogs[logIdx];
         logIdx++;
         audioFX.playTone(500 + logIdx * 120, 'sawtooth', 0.06, 0.04);
     }
@@ -193,6 +205,7 @@ const bootInterval = setInterval(() => {
 }, 110);
 
 function finishBoot() {
+    if (!bootScreen) return;
     bootScreen.style.transition = 'opacity 0.6s ease';
     bootScreen.style.opacity = '0';
     setTimeout(() => {
@@ -201,9 +214,11 @@ function finishBoot() {
     }, 600);
 }
 
-id('btn-skip-boot').addEventListener('click', finishBoot);
+const skipBtn = id('btn-skip-boot');
+if (skipBtn) skipBtn.addEventListener('click', finishBoot);
+
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && bootScreen.style.display !== 'none') {
+    if (e.key === 'Enter' && bootScreen && bootScreen.style.display !== 'none') {
         finishBoot();
     }
 });
@@ -221,27 +236,30 @@ const commands = {
     samurai: "<span style='color: var(--silver-red);'>[SAMURAI PROTOCOL]: 'A Riffing Code line that never fades away.'</span>"
 };
 
-terminalInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const inputVal = terminalInput.value.trim().toLowerCase();
-        audioFX.playClick();
-        
-        appendTerminalLine(`zamasor@root:~$ ${terminalInput.value}`, 'var(--silver-red)');
-        
-        if (inputVal === 'clear') {
-            terminalBody.innerHTML = '';
-        } else if (commands[inputVal]) {
-            appendTerminalLine(commands[inputVal], '#fff');
-        } else if (inputVal !== '') {
-            appendTerminalLine(`Comando não reconhecido: '${inputVal}'. Digite 'help' para ajuda.`, 'var(--neon-yellow)');
+if (terminalInput) {
+    terminalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const inputVal = terminalInput.value.trim().toLowerCase();
+            audioFX.playClick();
+            
+            appendTerminalLine(`zamasor@root:~$ ${terminalInput.value}`, 'var(--silver-red)');
+            
+            if (inputVal === 'clear') {
+                if (terminalBody) terminalBody.innerHTML = '';
+            } else if (commands[inputVal]) {
+                appendTerminalLine(commands[inputVal], '#fff');
+            } else if (inputVal !== '') {
+                appendTerminalLine(`Comando não reconhecido: '${inputVal}'. Digite 'help' para ajuda.`, 'var(--neon-yellow)');
+            }
+            
+            terminalInput.value = '';
+            if (terminalBody) terminalBody.scrollTop = terminalBody.scrollHeight;
         }
-        
-        terminalInput.value = '';
-        terminalBody.scrollTop = terminalBody.scrollHeight;
-    }
-});
+    });
+}
 
 function appendTerminalLine(text, color = '#fff') {
+    if (!terminalBody) return;
     const p = document.createElement('p');
     p.className = 'terminal-line';
     p.style.color = color;
@@ -250,17 +268,19 @@ function appendTerminalLine(text, color = '#fff') {
 }
 
 // Code Lab Interactive Actions
-const labOutput = id('lab-output');
-
-id('btn-glitch-gen').addEventListener('click', () => {
-    triggerRockGlitch();
-    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/SAMURAI_ZAMASOR_2026';
-    let result = '';
-    for (let i = 0; i < 40; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    labOutput.innerHTML = `> GLITCH_OUTPUT: <br><span style="color: var(--silver-red); font-size: 1.1rem;">${result}</span>`;
-});
+const glitchBtn = id('btn-glitch-gen');
+if (glitchBtn) {
+    glitchBtn.addEventListener('click', () => {
+        triggerRockGlitch();
+        const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/SAMURAI_ZAMASOR_2026';
+        let result = '';
+        for (let i = 0; i < 40; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        const labOutput = id('lab-output');
+        if (labOutput) labOutput.innerHTML = `> GLITCH_OUTPUT: <br><span style="color: var(--silver-red); font-size: 1.1rem;">${result}</span>`;
+    });
+}
 
 const excuses = [
     "Funciona perfeitamente na minha máquina cibernética.",
@@ -269,36 +289,51 @@ const excuses = [
     "Não é erro de código, é um protótipo de IA senciente tentando se libertar."
 ];
 
-id('btn-excuse-gen').addEventListener('click', () => {
-    audioFX.playClick();
-    const randomExcuse = excuses[Math.floor(Math.random() * excuses.length)];
-    labOutput.innerHTML = `> DEV_EXCUSE_PROTOCOL: <br><span style="color: var(--neon-yellow); font-size: 1.1rem;">"${randomExcuse}"</span>`;
-});
+const excuseBtn = id('btn-excuse-gen');
+if (excuseBtn) {
+    excuseBtn.addEventListener('click', () => {
+        audioFX.playClick();
+        const randomExcuse = excuses[Math.floor(Math.random() * excuses.length)];
+        const labOutput = id('lab-output');
+        if (labOutput) labOutput.innerHTML = `> DEV_EXCUSE_PROTOCOL: <br><span style="color: var(--neon-yellow); font-size: 1.1rem;">"${randomExcuse}"</span>`;
+    });
+}
 
-id('btn-sound-pulse').addEventListener('click', () => {
-    audioFX.playGlitch();
-    triggerRockGlitch();
-    labOutput.innerHTML = `> PULSO SAMURAI SINTETIZADO ENVIADO COM SUCESSO.`;
-});
+const soundPulseBtn = id('btn-sound-pulse');
+if (soundPulseBtn) {
+    soundPulseBtn.addEventListener('click', () => {
+        audioFX.playGlitch();
+        triggerRockGlitch();
+        const labOutput = id('lab-output');
+        if (labOutput) labOutput.innerHTML = `> PULSO SAMURAI SINTETIZADO ENVIADO COM SUCESSO.`;
+    });
+}
 
 // Form Submission Simulation
-id('cyber-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    audioFX.playClick();
-    alert('TRANSMISSÃO RECEBIDA COM SUCESSO! Renato (Zamasor) responderá em breve.');
-    e.target.reset();
-});
+const cyberForm = id('cyber-form');
+if (cyberForm) {
+    cyberForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        audioFX.playClick();
+        alert('TRANSMISSÃO RECEBIDA COM SUCESSO! Renato (Zamasor) responderá em breve.');
+        e.target.reset();
+    });
+}
 
 // Audio Toggle System
 const audioToggle = id('audio-toggle');
 const audioStatus = id('audio-status');
 
-audioToggle.addEventListener('click', () => {
-    audioFX.enabled = !audioFX.enabled;
-    audioStatus.textContent = audioFX.enabled ? 'ON' : 'OFF';
-    audioStatus.style.color = audioFX.enabled ? 'var(--silver-red)' : '#666';
-    if (audioFX.enabled) audioFX.playClick();
-});
+if (audioToggle) {
+    audioToggle.addEventListener('click', () => {
+        audioFX.enabled = !audioFX.enabled;
+        if (audioStatus) {
+            audioStatus.textContent = audioFX.enabled ? 'ON' : 'OFF';
+            audioStatus.style.color = audioFX.enabled ? 'var(--silver-red)' : '#666';
+        }
+        if (audioFX.enabled) audioFX.playClick();
+    });
+}
 
 // Audio feedback on interaction
 document.querySelectorAll('.cyber-btn, .cyber-card, input').forEach(elem => {
