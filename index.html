@@ -5,7 +5,444 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAMASOR // Renato Valentin Cachuba - Samurai Cyberpunk Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+/* CSS CYBERPUNK SAMURAI / JOHNNY SILVERHAND REDESIGN */
+:root {
+    --bg-color: #030305;
+    --card-bg: rgba(10, 10, 14, 0.92);
+    --silver-red: #ff003c;
+    --neon-yellow: #fcee0a;
+    --neon-cyan: #00f3ff;
+    --chrome-silver: #e2e8f0;
+    --text-color: #cbd5e1;
+    --font-head: 'Orbitron', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Rajdhani', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 60, 0.04), rgba(0, 243, 255, 0.02), rgba(252, 238, 10, 0.04));
+    background-size: 100% 4px, 6px 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.rock-glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.05;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: opacity 0.1s ease;
+}
+
+.cursor-dot {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--silver-red);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 14px var(--silver-red);
+}
+
+.cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--neon-yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, transform 0.1s ease-out;
+}
+
+#boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boot-box {
+    width: 90%;
+    max-width: 700px;
+    border: 3px solid var(--silver-red);
+    padding: 40px;
+    background: rgba(255, 0, 60, 0.05);
+    box-shadow: 0 0 40px rgba(255, 0, 60, 0.4);
+    font-family: var(--font-mono);
+}
+
+.mega-title {
+    font-family: var(--font-head);
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--silver-red);
+    text-shadow: 0 0 20px var(--silver-red);
+    letter-spacing: 6px;
+}
+
+.boot-sub {
+    color: var(--neon-yellow);
+    font-size: 1.1rem;
+    margin: 10px 0 20px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 16px;
+    background: #111;
+    margin: 20px 0;
+    border: 1px solid var(--silver-red);
+    padding: 2px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--silver-red);
+    box-shadow: 0 0 15px var(--silver-red);
+    transition: width 0.1s linear;
+}
+
+.boot-log {
+    color: var(--neon-yellow);
+    font-size: 1rem;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+header {
+    text-align: center;
+    padding: 100px 20px 60px;
+    border-bottom: 4px solid var(--silver-red);
+    margin-bottom: 60px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(255, 0, 60, 0.08) 0%, rgba(0,0,0,0) 100%);
+    overflow: hidden;
+}
+
+.samurai-watermark-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 500px;
+    height: auto;
+    opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+    z-index: -1;
+    filter: drop-shadow(0 0 25px var(--silver-red));
+}
+
+.hero-name {
+    font-family: var(--font-head);
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px var(--silver-red);
+    line-height: 1.1;
+}
+
+.hero-alias {
+    font-family: var(--font-head);
+    font-size: 6rem;
+    font-weight: 900;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 30px var(--neon-yellow);
+    letter-spacing: 12px;
+    margin-top: 10px;
+}
+
+.hero-sub {
+    font-family: var(--font-mono);
+    color: var(--chrome-silver);
+    font-size: 1.5rem;
+    margin-top: 20px;
+    letter-spacing: 4px;
+}
+
+.badge-container {
+    margin-top: 30px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 0, 60, 0.12);
+    border: 1px solid var(--silver-red);
+    color: var(--silver-red);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    margin: 5px;
+    font-weight: bold;
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+}
+
+.side-hud {
+    position: sticky;
+    top: 40px;
+    height: fit-content;
+}
+
+.hud-title {
+    font-family: var(--font-mono);
+    color: var(--silver-red);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--silver-red);
+    padding-bottom: 5px;
+}
+
+.stat-group {
+    margin-bottom: 18px;
+}
+
+.stat-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--neon-yellow);
+    margin-bottom: 5px;
+}
+
+.stat-bar {
+    width: 100%;
+    height: 10px;
+    background: #111;
+    border: 1px solid var(--silver-red);
+}
+
+.stat-fill {
+    height: 100%;
+    background: var(--silver-red);
+    box-shadow: 0 0 10px var(--silver-red);
+}
+
+section {
+    margin-bottom: 70px;
+}
+
+.sec-title {
+    font-family: var(--font-head);
+    color: var(--silver-red);
+    font-size: 2.5rem;
+    margin-bottom: 35px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    letter-spacing: 3px;
+    border-bottom: 2px solid rgba(255, 0, 60, 0.4);
+    padding-bottom: 12px;
+}
+
+.sec-num {
+    color: var(--neon-yellow);
+}
+
+.cyber-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 0, 60, 0.3);
+    border-left: 6px solid var(--silver-red);
+    padding: 35px;
+    position: relative;
+    clip-path: polygon(0 0, 97% 0, 100% 20px, 100% 100%, 3% 100%, 0 95%);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cyber-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--silver-red);
+    box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.cyber-btn {
+    background: transparent;
+    color: var(--neon-yellow);
+    border: 2px solid var(--neon-yellow);
+    font-family: var(--font-head);
+    padding: 16px 30px;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    display: inline-block;
+    margin: 8px 8px 8px 0;
+    width: 100%;
+    text-align: center;
+}
+
+.cyber-btn:hover {
+    background: var(--neon-yellow);
+    color: #000;
+    box-shadow: 0 0 25px var(--neon-yellow);
+    font-weight: bold;
+}
+
+.terminal-window {
+    background: #020305;
+    border: 2px solid var(--silver-red);
+    box-shadow: 0 0 25px rgba(255, 0, 60, 0.25);
+    font-family: var(--font-mono);
+}
+
+.terminal-header {
+    background: rgba(255, 0, 60, 0.2);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 0, 60, 0.4);
+    font-size: 0.95rem;
+    color: var(--silver-red);
+    font-weight: bold;
+}
+
+.terminal-body {
+    padding: 25px;
+    height: 280px;
+    overflow-y: auto;
+    font-size: 1.05rem;
+}
+
+.terminal-input-row {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.8);
+    border-top: 1px solid rgba(255, 0, 60, 0.3);
+}
+
+#terminal-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    width: 100%;
+}
+
+.cyber-input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0,0,0,0.85);
+    border: 1px solid var(--silver-red);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    outline: none;
+}
+
+.cyber-input:focus {
+    box-shadow: 0 0 15px var(--silver-red);
+}
+
+.audio-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--card-bg);
+    border: 2px solid var(--silver-red);
+    padding: 12px 22px;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--silver-red);
+    z-index: 1000;
+}
+
+.code-box {
+    background: #000;
+    border: 1px dashed var(--silver-red);
+    padding: 20px;
+    font-family: var(--font-mono);
+    color: var(--silver-red);
+    font-size: 1rem;
+    min-height: 140px;
+}
+
+@media (max-width: 992px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .side-hud { position: static; margin-bottom: 40px; }
+    .hero-name { font-size: 3rem; }
+    .hero-alias { font-size: 4rem; }
+    .sec-title { font-size: 1.8rem; }
+}
+    </style>
 </head>
 <body>
 
@@ -15,7 +452,7 @@
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
 
-    <!-- TELA DE CARREGAMENTO / BOOT -->
+    <!-- TELA DE CARREGAMENTO / BOOT (DISPENSA AUTOMÁTICA) -->
     <div id="boot-screen">
         <div class="boot-box">
             <div class="mega-title" data-text="SAMURAI_OS">SAMURAI_OS</div>
@@ -25,7 +462,7 @@
                 <div class="progress-bar" id="boot-progress"></div>
             </div>
             <div class="boot-log" id="boot-log">> SYSTEM_CHECK: OK</div>
-            <button class="cyber-btn" id="btn-skip-boot" style="margin-top: 20px; font-size: 0.85rem; padding: 8px 16px;">PULAR BOOT [ENTER]</button>
+            <button class="cyber-btn" id="btn-skip-boot" onclick="dismissBoot()" style="margin-top: 20px; font-size: 0.85rem; padding: 8px 16px;">PULAR BOOT [ENTER]</button>
         </div>
     </div>
 
@@ -172,4 +609,312 @@
             </div>
         </main>
 
-        <footer style="text-align: center; margin-top: 80px; padding: 30px;
+        <footer style="text-align: center; margin-top: 80px; padding: 30px; font-family: 'Share Tech Mono'; color: #666; border-top: 2px solid var(--silver-red);">
+            <p>© 2026 RENATO VALENTIN CACHUBA (ZAMASOR) // NIGHT CITY PROTOCOLS // SAMURAI CODE</p>
+        </footer>
+
+    </div>
+
+    <script>
+    function dismissBoot() {
+        var boot = document.getElementById('boot-screen');
+        if (boot) {
+            boot.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('click', dismissBoot);
+    window.addEventListener('keydown', dismissBoot);
+    setTimeout(dismissBoot, 1200);
+
+    // JAVASCRIPT CYBERPUNK SAMURAI - ZAMASOR_OS (BLINDADO)
+document.addEventListener('DOMContentLoaded', () => {
+
+    class CyberSound {
+        constructor() {
+            this.ctx = null;
+            this.enabled = true;
+        }
+
+        init() {
+            if (!this.ctx) {
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtx();
+                } catch (e) {}
+            }
+        }
+
+        playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.05) {
+            if (!this.enabled) return;
+            this.init();
+            if (!this.ctx) return;
+            if (this.ctx.state === 'suspended') {
+                this.ctx.resume().catch(() => {});
+            }
+            try {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        playHover() { this.playTone(600, 'sawtooth', 0.04, 0.02); }
+        playClick() {
+            this.playTone(1400, 'square', 0.08, 0.05);
+            setTimeout(() => this.playTone(300, 'sawtooth', 0.07, 0.04), 40);
+        }
+        playGlitch() {
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    this.playTone(Math.floor(Math.random() * 2000) + 200, 'sawtooth', 0.04, 0.05);
+                }, i * 30);
+            }
+        }
+    }
+
+    const audioFX = new CyberSound();
+    const rockOverlay = document.getElementById('rock-glitch-overlay');
+
+    function triggerRockGlitch() {
+        if (!rockOverlay) return;
+        const randomX = Math.floor(Math.random() * 80) + 10;
+        const randomY = Math.floor(Math.random() * 80) + 10;
+        
+        rockOverlay.style.backgroundImage = `url('Samurai.png')`;
+        rockOverlay.style.backgroundPosition = `${randomX}% ${randomY}%`;
+        rockOverlay.style.opacity = '0.35';
+        audioFX.playGlitch();
+
+        setTimeout(() => {
+            rockOverlay.style.opacity = '0.05';
+        }, 180);
+    }
+
+    setInterval(() => {
+        if (Math.random() > 0.6) triggerRockGlitch();
+    }, 3000);
+
+    // Custom Cursor
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    window.addEventListener('mousemove', (e) => {
+        if (cursorDot) {
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+        }
+        if (cursorRing) {
+            cursorRing.style.left = `${e.clientX}px`;
+            cursorRing.style.top = `${e.clientY}px`;
+        }
+    });
+
+    // Background Canvas Particles
+    const canvas = document.getElementById('bg-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = Math.random() * 2 + 0.5;
+                this.alpha = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 0, 60, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                for (let j = idx + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.15 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+    }
+
+    // Boot Screen Loader Logic
+    let bootProgress = 0;
+    const progressBar = document.getElementById('boot-progress');
+    const bootLog = document.getElementById('boot-log');
+    const bootScreen = document.getElementById('boot-screen');
+
+    const bootLogs = [
+        "> INICIANDO CHIP NEURAL OVERDRIVE...",
+        "> AQUECENDO AMPLIFICADORES SAMURAI...",
+        "> CARREGANDO MÓDULOS DE HARDWARE & JS...",
+        "> IMPLANTANDO INTERFACE ZAMASOR_OS...",
+        "> CONEXÃO ESTABELECIDA EM NIGHT CITY."
+    ];
+
+    let logIdx = 0;
+    const bootInterval = setInterval(() => {
+        bootProgress += 25;
+        if (bootProgress > 100) bootProgress = 100;
+        
+        if (progressBar) progressBar.style.width = `${bootProgress}%`;
+        
+        if (logIdx < bootLogs.length) {
+            if (bootLog) bootLog.textContent = bootLogs[logIdx];
+            logIdx++;
+            audioFX.playTone(600, 'sawtooth', 0.05, 0.04);
+        }
+
+        if (bootProgress >= 100) {
+            clearInterval(bootInterval);
+            setTimeout(dismissBoot, 300);
+        }
+    }, 200);
+
+    setTimeout(() => {
+        dismissBoot();
+    }, 1500);
+
+    // Terminal CLI
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalBody = document.getElementById('terminal-body');
+
+    const commands = {
+        help: "Comandos: <span style='color: var(--neon-yellow);'>bio, skills, certs, robotics, samurai, clear</span>",
+        bio: "Renato Valentin Cachuba (Zamasor). Engenharia reversa, robótica e desenvolvimento de software.",
+        skills: "Stack: HTML5, CSS3, JavaScript, Python, Contabilidade Empresarial, Hardware.",
+        certs: "Certificados: Frontend Web, Alura Python Track, Gestão & Contabilidade.",
+        robotics: "Projetos: automação de hardware, modificação de circuitos e prototipagem.",
+        samurai: "<span style='color: var(--silver-red);'>[SAMURAI PROTOCOL]: 'A Riffing Code line that never fades away.'</span>"
+    };
+
+    if (terminalInput) {
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const val = terminalInput.value.trim().toLowerCase();
+                audioFX.playClick();
+                appendLine(`zamasor@root:~$ ${terminalInput.value}`, 'var(--silver-red)');
+                if (val === 'clear') {
+                    if (terminalBody) terminalBody.innerHTML = '';
+                } else if (commands[val]) {
+                    appendLine(commands[val], '#fff');
+                } else if (val !== '') {
+                    appendLine(`Comando desconhecido: '${val}'. Digite 'help'.`, 'var(--neon-yellow)');
+                }
+                terminalInput.value = '';
+                if (terminalBody) terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+        });
+    }
+
+    function appendLine(text, color = '#fff') {
+        if (!terminalBody) return;
+        const p = document.createElement('p');
+        p.className = 'terminal-line';
+        p.style.color = color;
+        p.innerHTML = text;
+        terminalBody.appendChild(p);
+    }
+
+    // Code Lab
+    const labOutput = document.getElementById('lab-output');
+    const glitchGen = document.getElementById('btn-glitch-gen');
+    if (glitchGen) {
+        glitchGen.addEventListener('click', () => {
+            triggerRockGlitch();
+            let res = '';
+            const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/SAMURAI2026';
+            for (let i = 0; i < 35; i++) res += chars[Math.floor(Math.random() * chars.length)];
+            if (labOutput) labOutput.innerHTML = `> GLITCH: <br><span style="color: var(--silver-red);">${res}</span>`;
+        });
+    }
+
+    const excuseBtn = document.getElementById('btn-excuse-gen');
+    const excuses = [
+        "Funciona perfeitamente na minha máquina cibernética.",
+        "Foi um pulso eletromagnético solar que alterou a variável.",
+        "O compilador não tinha estilo suficiente para entender o código."
+    ];
+    if (excuseBtn) {
+        excuseBtn.addEventListener('click', () => {
+            audioFX.playClick();
+            const ex = excuses[Math.floor(Math.random() * excuses.length)];
+            if (labOutput) labOutput.innerHTML = `> DESCULPA DEV: <br><span style="color: var(--neon-yellow);">"${ex}"</span>`;
+        });
+    }
+
+    const soundPulse = document.getElementById('btn-sound-pulse');
+    if (soundPulse) {
+        soundPulse.addEventListener('click', () => {
+            audioFX.playGlitch();
+            triggerRockGlitch();
+            if (labOutput) labOutput.innerHTML = `> PULSO SAMURAI ENVIADO COM SUCESSO.`;
+        });
+    }
+
+    const form = document.getElementById('cyber-form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            audioFX.playClick();
+            alert('TRANSMISSÃO RECEBIDA COM SUCESSO!');
+            form.reset();
+        });
+    }
+
+    const audioToggle = document.getElementById('audio-toggle');
+    const audioStatus = document.getElementById('audio-status');
+    if (audioToggle) {
+        audioToggle.addEventListener('click', () => {
+            audioFX.enabled = !audioFX.enabled;
+            if (audioStatus) {
+                audioStatus.textContent = audioFX.enabled ? 'ON' : 'OFF';
+                audioStatus.style.color = audioFX.enabled ? 'var(--silver-red)' : '#666';
+            }
+            if (audioFX.enabled) audioFX.playClick();
+        });
+    }
+});
+    </script>
+</body>
+</html>
