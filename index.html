@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="Samurai" sizes="180x180" href="/Samurai.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="Samurai" href="/zamasorportifolio">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portifolio do Samurai</title>
+    <title>ZAMASOR // Renato Valentin Cachuba - Samurai Cyberpunk Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
 /* CSS CYBERPUNK SAMURAI / JOHNNY SILVERHAND REDESIGN */
@@ -236,6 +232,13 @@ header {
     font-size: 0.95rem;
     margin: 5px;
     font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    background: var(--silver-red);
+    color: #000;
+    box-shadow: 0 0 15px var(--silver-red);
 }
 
 .main-layout {
@@ -446,6 +449,7 @@ section {
     .hero-alias { font-size: 4rem; }
     .sec-title { font-size: 1.8rem; }
 }
+
     </style>
 </head>
 <body>
@@ -456,7 +460,7 @@ section {
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
 
-    <!-- TELA DE CARREGAMENTO / BOOT (DISPENSA AUTOMÁTICA) -->
+    <!-- TELA DE CARREGAMENTO / BOOT -->
     <div id="boot-screen">
         <div class="boot-box">
             <div class="mega-title" data-text="SAMURAI_OS">SAMURAI_OS</div>
@@ -631,7 +635,7 @@ section {
     window.addEventListener('keydown', dismissBoot);
     setTimeout(dismissBoot, 1200);
 
-    // JAVASCRIPT CYBERPUNK SAMURAI - ZAMASOR_OS (BLINDADO)
+    // JAVASCRIPT CYBERPUNK SAMURAI - SISTEMA AUDIO SENSORIAL
 document.addEventListener('DOMContentLoaded', () => {
 
     class CyberSound {
@@ -649,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.05) {
+        playTone(freq, type = 'sine', duration = 0.08, gainVal = 0.04) {
             if (!this.enabled) return;
             this.init();
             if (!this.ctx) return;
@@ -670,7 +674,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {}
         }
 
-        playHover() { this.playTone(600, 'sawtooth', 0.04, 0.02); }
+        // SONS SENSORIAIS VARIADOS PARA CADA ELEMENTO
+        playBtnHover() { this.playTone(850, 'sawtooth', 0.05, 0.03); }
+        playCardHover() { this.playTone(420, 'triangle', 0.07, 0.025); }
+        playBadgeHover() { this.playTone(1200, 'sine', 0.04, 0.02); }
         playClick() {
             this.playTone(1400, 'square', 0.08, 0.05);
             setTimeout(() => this.playTone(300, 'sawtooth', 0.07, 0.04), 40);
@@ -705,6 +712,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if (Math.random() > 0.6) triggerRockGlitch();
     }, 3000);
+
+    // VINCULANDO OS SONS SENSORIAIS AOS EVENTOS MOUSEENTER
+    document.querySelectorAll('.cyber-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', () => audioFX.playBtnHover());
+    });
+
+    document.querySelectorAll('.cyber-card').forEach(card => {
+        card.addEventListener('mouseenter', () => audioFX.playCardHover());
+    });
+
+    document.querySelectorAll('.badge').forEach(badge => {
+        badge.addEventListener('mouseenter', () => audioFX.playBadgeHover());
+    });
 
     // Custom Cursor
     const cursorDot = document.getElementById('cursor-dot');
@@ -782,43 +802,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animateCanvas();
     }
 
-    // Boot Screen Loader Logic
-    let bootProgress = 0;
-    const progressBar = document.getElementById('boot-progress');
-    const bootLog = document.getElementById('boot-log');
-    const bootScreen = document.getElementById('boot-screen');
-
-    const bootLogs = [
-        "> INICIANDO CHIP NEURAL OVERDRIVE...",
-        "> AQUECENDO AMPLIFICADORES SAMURAI...",
-        "> CARREGANDO MÓDULOS DE HARDWARE & JS...",
-        "> IMPLANTANDO INTERFACE ZAMASOR_OS...",
-        "> CONEXÃO ESTABELECIDA EM NIGHT CITY."
-    ];
-
-    let logIdx = 0;
-    const bootInterval = setInterval(() => {
-        bootProgress += 25;
-        if (bootProgress > 100) bootProgress = 100;
-        
-        if (progressBar) progressBar.style.width = `${bootProgress}%`;
-        
-        if (logIdx < bootLogs.length) {
-            if (bootLog) bootLog.textContent = bootLogs[logIdx];
-            logIdx++;
-            audioFX.playTone(600, 'sawtooth', 0.05, 0.04);
-        }
-
-        if (bootProgress >= 100) {
-            clearInterval(bootInterval);
-            setTimeout(dismissBoot, 300);
-        }
-    }, 200);
-
-    setTimeout(() => {
-        dismissBoot();
-    }, 1500);
-
     // Terminal CLI
     const terminalInput = document.getElementById('terminal-input');
     const terminalBody = document.getElementById('terminal-body');
@@ -893,7 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
             audioFX.playGlitch();
             triggerRockGlitch();
             if (labOutput) labOutput.innerHTML = `> PULSO SAMURAI ENVIADO COM SUCESSO.`;
-        });
+    });
     }
 
     const form = document.getElementById('cyber-form');
