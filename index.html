@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <link rel="Samurai" sizes="180x180" href="Samurai.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="Samurai" href="/Samurai">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAMASOR // Renato Valentin Cachuba - Samurai Cyberpunk Portfolio</title>
+    <title>Portifolio do Samurai</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
 /* CSS CYBERPUNK SAMURAI / JOHNNY SILVERHAND REDESIGN */
@@ -232,13 +236,6 @@ header {
     font-size: 0.95rem;
     margin: 5px;
     font-weight: bold;
-    transition: all 0.2s ease;
-}
-
-.badge:hover {
-    background: var(--silver-red);
-    color: #000;
-    box-shadow: 0 0 15px var(--silver-red);
 }
 
 .main-layout {
@@ -460,7 +457,7 @@ section {
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
 
-    <!-- TELA DE CARREGAMENTO / BOOT -->
+    <!-- TELA DE CARREGAMENTO / BOOT (DISPENSA AUTOMÁTICA) -->
     <div id="boot-screen">
         <div class="boot-box">
             <div class="mega-title" data-text="SAMURAI_OS">SAMURAI_OS</div>
@@ -631,11 +628,12 @@ section {
         }
     }
 
+    // Fechar boot automaticamente ao clicar em qualquer lugar ou pressionar qualquer tecla
     window.addEventListener('click', dismissBoot);
     window.addEventListener('keydown', dismissBoot);
     setTimeout(dismissBoot, 1200);
 
-    // JAVASCRIPT CYBERPUNK SAMURAI - SISTEMA AUDIO SENSORIAL
+    // JAVASCRIPT CYBERPUNK SAMURAI - ROBUSTO E SEGURO
 document.addEventListener('DOMContentLoaded', () => {
 
     class CyberSound {
@@ -653,7 +651,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        playTone(freq, type = 'sine', duration = 0.08, gainVal = 0.04) {
+        // Toca uma nota com fading suave (envelope harmônico)
+        playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.03) {
             if (!this.enabled) return;
             this.init();
             if (!this.ctx) return;
@@ -665,28 +664,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gain = this.ctx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                
+                // Attack e Decay suaves para eliminar estalos
+                gain.gain.setValueAtTime(0, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(gainVal, this.ctx.currentTime + 0.015);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
+
                 osc.start();
                 osc.stop(this.ctx.currentTime + duration);
             } catch (e) {}
         }
 
-        // SONS SENSORIAIS VARIADOS PARA CADA ELEMENTO
-        playBtnHover() { this.playTone(850, 'sawtooth', 0.05, 0.03); }
-        playCardHover() { this.playTone(420, 'triangle', 0.07, 0.025); }
-        playBadgeHover() { this.playTone(1200, 'sine', 0.04, 0.02); }
-        playClick() {
-            this.playTone(1400, 'square', 0.08, 0.05);
-            setTimeout(() => this.playTone(300, 'sawtooth', 0.07, 0.04), 40);
+        // Acorde ou Nota Harmônica com Escala Pentatônica Néon (Notas F: A, C, E, G, B)
+        playBtnHover() {
+            // Nota cristalina em onda senoidal (A5 - 880Hz)
+            this.playTone(880, 'sine', 0.18, 0.025);
+            setTimeout(() => this.playTone(1320, 'sine', 0.15, 0.015), 30);
         }
+
+        playCardHover() {
+            // Tom cristalino grave/médio aconchegante em quinta (E4 + B4)
+            this.playTone(329.63, 'sine', 0.25, 0.02);
+            this.playTone(493.88, 'sine', 0.22, 0.015);
+        }
+
+        playBadgeHover() {
+            // Brilho muito suave (C6 - 1046.5Hz)
+            this.playTone(1046.5, 'sine', 0.12, 0.015);
+        }
+
+        playClick() {
+            // Acorde de confirmação harmônico synth (E5 -> A5)
+            this.playTone(659.25, 'sine', 0.2, 0.03);
+            setTimeout(() => this.playTone(880, 'sine', 0.25, 0.03), 40);
+        }
+
         playGlitch() {
-            for (let i = 0; i < 4; i++) {
+            // Arpejo harmônico sutil em escala Cyberpunk Pentatônica
+            const notes = [440, 554.37, 659.25, 880, 1108.73];
+            for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
-                    this.playTone(Math.floor(Math.random() * 2000) + 200, 'sawtooth', 0.04, 0.05);
-                }, i * 30);
+                    const note = notes[Math.floor(Math.random() * notes.length)];
+                    this.playTone(note, 'sine', 0.12, 0.02);
+                }, i * 45);
             }
         }
     }
@@ -712,19 +735,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if (Math.random() > 0.6) triggerRockGlitch();
     }, 3000);
-
-    // VINCULANDO OS SONS SENSORIAIS AOS EVENTOS MOUSEENTER
-    document.querySelectorAll('.cyber-btn').forEach(btn => {
-        btn.addEventListener('mouseenter', () => audioFX.playBtnHover());
-    });
-
-    document.querySelectorAll('.cyber-card').forEach(card => {
-        card.addEventListener('mouseenter', () => audioFX.playCardHover());
-    });
-
-    document.querySelectorAll('.badge').forEach(badge => {
-        badge.addEventListener('mouseenter', () => audioFX.playBadgeHover());
-    });
 
     // Custom Cursor
     const cursorDot = document.getElementById('cursor-dot');
@@ -801,6 +811,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animateCanvas();
     }
+
+    // Boot Screen Loader Logic
+    let bootProgress = 0;
+    const progressBar = document.getElementById('boot-progress');
+    const bootLog = document.getElementById('boot-log');
+    const bootScreen = document.getElementById('boot-screen');
+
+    const bootLogs = [
+        "> INICIANDO CHIP NEURAL OVERDRIVE...",
+        "> AQUECENDO AMPLIFICADORES SAMURAI...",
+        "> CARREGANDO MÓDULOS DE HARDWARE & JS...",
+        "> IMPLANTANDO INTERFACE ZAMASOR_OS...",
+        "> CONEXÃO ESTABELECIDA EM NIGHT CITY."
+    ];
+
+    let logIdx = 0;
+    const bootInterval = setInterval(() => {
+        bootProgress += Math.floor(Math.random() * 18) + 8;
+        if (bootProgress > 100) bootProgress = 100;
+        
+        if (progressBar) progressBar.style.width = `${bootProgress}%`;
+        
+        if (bootProgress > (logIdx + 1) * 20 && logIdx < bootLogs.length) {
+            if (bootLog) bootLog.textContent = bootLogs[logIdx];
+            logIdx++;
+            audioFX.playTone(500 + logIdx * 100, 'sawtooth', 0.05, 0.04);
+        }
+
+        if (bootProgress >= 100) {
+            clearInterval(bootInterval);
+            setTimeout(finishBoot, 350);
+        }
+    }, 90);
+
+    function finishBoot() {
+        if (!bootScreen) return;
+        bootScreen.style.transition = 'opacity 0.5s ease';
+        bootScreen.style.opacity = '0';
+        setTimeout(() => {
+            bootScreen.style.display = 'none';
+            triggerRockGlitch();
+        }, 500);
+    }
+
+    const skipBtn = document.getElementById('btn-skip-boot');
+    if (skipBtn) {
+        skipBtn.addEventListener('click', finishBoot);
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            finishBoot();
+        }
+    });
 
     // Terminal CLI
     const terminalInput = document.getElementById('terminal-input');
@@ -902,6 +966,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
     </script>
 </body>
 </html>
