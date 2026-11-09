@@ -166,19 +166,19 @@ header {
     overflow: hidden;
 }
 
-.samurai-watermark {
+.samurai-watermark-img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: var(--font-head);
-    font-size: 14rem;
-    font-weight: 900;
-    color: rgba(255, 0, 60, 0.04);
-    letter-spacing: 25px;
+    width: 60%;
+    max-width: 500px;
+    height: auto;
+    opacity: 0.15;
     pointer-events: none;
     user-select: none;
     z-index: -1;
+    filter: drop-shadow(0 0 25px var(--silver-red));
 }
 
 .hero-name {
