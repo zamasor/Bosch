@@ -57,7 +57,7 @@ class CyberSound {
 
 const audioFX = new CyberSound();
 
-// Glitch Overlay com a imagem do Samurai
+// Glitch Overlay com a imagem do Samurai (Samurai.png)
 const rockSymbols = [
     'Samurai.png'
 ];
@@ -82,29 +82,11 @@ function triggerRockGlitch() {
     }, 180);
 }
 
-const rockOverlay = id('rock-glitch-overlay');
-
-function triggerRockGlitch() {
-    const randomSymbol = rockSymbols[Math.floor(Math.random() * rockSymbols.length)];
-    const randomX = Math.floor(Math.random() * 80) + 10;
-    const randomY = Math.floor(Math.random() * 80) + 10;
-    
-    rockOverlay.style.backgroundImage = `url('${randomSymbol}')`;
-    rockOverlay.style.backgroundPosition = `${randomX}% ${randomY}%`;
-    rockOverlay.style.opacity = '0.35';
-    
-    audioFX.playGlitch();
-
-    setTimeout(() => {
-        rockOverlay.style.opacity = '0.05';
-    }, 200);
-}
-
 setInterval(() => {
-    if (Math.random() > 0.6) {
+    if (Math.random() > 0.65) {
         triggerRockGlitch();
     }
-}, 3000);
+}, 3200);
 
 // Custom Cursor
 const cursorDot = id('cursor-dot');
